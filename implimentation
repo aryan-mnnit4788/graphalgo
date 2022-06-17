@@ -1,0 +1,96 @@
+#include<bits/stdc++.h>
+using namespace std;
+class graph
+{
+   public:
+   unordered_map<int,list<int>> adjlist;
+   void addedge(int v,int u,bool directed)
+   {
+       //directed=0-undirected graph;
+       adjlist[u].push_back(v);
+       if(!directed)
+       {
+           adjlist[v].push_back(u);
+       }
+   }
+   void printlist()
+   {
+       for(auto i: adjlist)
+       {
+           cout<<i.first<<"->";
+           for(auto j: i.second)
+           {
+               cout<<j<<",";
+           }
+           cout<<endl;
+       }
+   }
+   void bfs(int vertex,vector<int> &ans)
+   {
+    //traverse all component of graph;
+    unordered_map<int,bool> visited;
+    for(int i=0;i<vertex;i++)
+    {
+        if(!visited[i])
+        {
+           printbfs(adjlist,visited,ans,i);
+        }
+
+    }
+   }
+   void printbfs(unordered_map<int,list<int>> &adjlist, unordered_map<int,bool> &visited,vector<int> &ans,int node)
+   {
+    queue<int> q;
+    q.push(node);
+    visited[node]=true;
+    while(!q.empty())
+    {
+        int frontnode=q.front();
+        q.pop();
+        ans.push_back(frontnode);
+        //traverse all neighbours of front node//
+        for(auto i:adjlist[node])
+        {
+            if(!visited[i])
+            {
+                q.push(i);
+            visited[i]=true;
+            }
+        }
+    }
+
+   }
+   
+
+};
+
+int main()
+{
+    int n;
+    cout<<"enter no. of node"<<endl;
+    cin>>n;
+    int m;
+    cout<<" enter no. of edges"<<endl;
+    cin>>m;
+    graph g;
+    for(int i=0;i<m;i++)
+    {
+        int u,v;
+        cin>>u>>v;
+        g.addedge(u,v,0);
+
+    }
+    g.printlist();
+    vector<int> ans;
+    g.bfs(n,ans);
+    for(auto i: ans)
+    {
+        cout<<i<<" ";
+    }
+    
+
+    return 0;
+
+
+
+}
