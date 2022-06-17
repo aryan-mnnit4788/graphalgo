@@ -1,0 +1,50 @@
+#include<bits/stdc++.h>
+vector<int> dijkstra(vector<vector<int>> &vec, int vertices, int edges, int source) {
+    unordered_map<int,list<pair<int,int>>> adj;
+    //making adj list//
+    for(int i=0;i<vec.size();i++)
+    {
+        int u=vec[i][0];
+        int v=vec[i][1];
+        int d=vec[i][2];
+        pair<int,int> p1={u,d};
+        pair<int,int> p2={v,d};
+        adj[u].push_back(p2);
+        adj[v].push_back(p1);
+        
+    }
+    set<pair<int,int>> s;
+    //creation of distance array//
+    vector<int> d(vertices,INT_MAX);
+    d[source]=0;
+    s.insert(make_pair(0,source));
+    while(!s.empty())
+    {
+        auto top = *(s.begin());
+        int distance=top.first;
+        int node=top.second;
+        //removing top element from set//
+        s.erase(s.begin());
+        //traverse on negibhour//
+        for(auto i: adj[node])
+        {   //new distance will br prev distance + node to node distance//
+            int newdistance=distance+i.second;
+            if(newdistance<d[i.first])
+                
+            {//if tghere present a past entry then distance will be same as in ditance array kyoki wo chhota hai purane distance se tabhi humne use set me daala hai aur distance array me sath hi sath uski distance update ki hai
+                auto record= s.find(make_pair(d[i.first],i.first));\
+                // if there is entry corresponding to that node and we find a minimum distance anser so we will remove it from our set//
+                if(record!=s.end())
+                {
+                    s.erase(record);
+                }
+             // now insert the new distance set and old node//
+              s.insert(make_pair(newdistance,i.first));
+             // update new distance in our distance array//
+                d[i.first]=newdistance;
+               
+            }
+        }
+    }
+    return d;
+}
